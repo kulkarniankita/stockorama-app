@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+form {
+  @apply m-0 p-4 rounded-xl border-dashed border-2;
+  /* border: 1px dashed hsl(250deg 100% 90%); */
+  /* border-radius: 2px; */
+  box-shadow: 0px 0px 0px 3px white, 0px 1px 4px hsl(250deg 100% 40% / 0.25),
+    0px 2px 8px hsl(250deg 100% 40% / 0.125),
+    0px 4px 16px hsl(250deg 100% 40% / 0.05);
+}
+
+h1 {
+  @apply text-3xl font-bold;
+}
+
+h2 {
+  @apply text-4xl bg-gradient-to-r from-pink-500 to-orange-500 inline-block text-transparent bg-clip-text;
+}
+
+h3 {
+  @apply text-xl mb-6 text-gray-800;
+}
+
+label {
+  @apply text-gray-800 dark:text-white;
+}
+
+p {
+  @apply text-gray-600 text-base lg:text-lg;
+}
+
+span {
+  @apply text-gray-400 text-sm;
+}
+
+header {
+  @apply flex items-center text-3xl text-center py-4 bg-purple-700 text-white border-b-gray-200 border-dashed px-12 border-b-2;
+}
+
+a {
+  @apply text-lg hover:font-bold transition-all duration-300 ease-in-out;
+}
+
+input {
+  @apply bg-gray-100 border border-gray-300 text-gray-800 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  .wrapper {
+    @apply flex min-h-screen max-w-5xl mx-auto flex-col py-12 lg:px-24 px-12 w-full space-y-6 pb-[calc(10vh+100px)];
+  }
+
+  .card {
+    @apply flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-xs hover:shadow-lg transition-all duration-500 ease-in-out transform hover:-translate-y-1 hover:opacity-95 active:scale-[0.98];
+  }
+
+  .like-button {
+    @apply flex items-center space-x-2 border-dashed border-2 p-2 rounded-xl w-40 justify-center hover:cursor-pointer hover:border-pink-200;
+  }
+
+  .error {
+    @apply text-red-800 text-lg mb-6 bg-red-100 border-2 border-gray-300 rounded-md p-2;
+  }
+
+  .delete-button {
+    @apply ml-2 px-3 py-1 hover:cursor-pointer hover:text-red-500 rounded-sm text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center;
+  }
+
+  .submit-button {
+    @apply w-40 mt-10 px-4 text-base lg:text-xl py-2 border-2 rounded-lg bg-linear-to-r from-fuchsia-600 to-pink-600 transition-all duration-300 ease-in-out hover:from-pink-600 hover:to-orange-500 hover:scale-105 focus:from-pink-600 focus:to-orange-500 focus:scale-105 text-white;
+  }
 }
