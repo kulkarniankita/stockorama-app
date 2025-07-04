@@ -32,3 +32,14 @@ export const incrementLikes = async ({ id }: { id: string }) => {
     throw error;
   }
 };
+
+export const deleteProduct = async ({ id }: { id: string }) => {
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error("Error: Failed to deleting product", error);
+    throw error;
+  }
+};
