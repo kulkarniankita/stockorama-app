@@ -20,3 +20,15 @@ export const createProduct = async ({
     throw error;
   }
 };
+
+export const incrementLikes = async ({ id }: { id: string }) => {
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: { likes: { increment: 1 } },
+    });
+  } catch (error) {
+    console.error("Error: Failed to increment product likes", error);
+    throw error;
+  }
+};

@@ -1,6 +1,6 @@
 "use server";
 
-import { createProduct } from "@/lib/db/product";
+import { createProduct, incrementLikes } from "@/lib/db/product";
 import { State } from "@/types/product-types";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -59,4 +59,18 @@ export const createProductAction = async (
 
   //redirect
   redirect("/products");
+};
+
+export const incrementLikesAction = async ({ id }: { id: string }) => {
+  try {
+    //make the db request
+    await incrementLikes({ id });
+  } catch (err) {
+    console.error("error occurred incrementing likes", err);
+    return {
+      type: "error",
+      message: "Error: Failed to increment likes",
+      error: err,
+    };
+  }
 };

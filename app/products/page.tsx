@@ -1,3 +1,4 @@
+import { LikeButton } from "@/components/like-button";
 import { prisma } from "@/lib/db";
 import { Trash2Icon } from "lucide-react";
 import Link from "next/link";
@@ -23,7 +24,7 @@ export default async function ProductsPage() {
               <span>Qty: {quantity}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="like-button">💖 {likes}</div>
+              <LikeButton likes={likes} id={id} />
               <div className="delete-button">
                 <Trash2Icon />
               </div>
