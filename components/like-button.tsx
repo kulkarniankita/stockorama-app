@@ -1,6 +1,7 @@
 "use client";
 
 import { incrementLikesAction } from "@/actions/product-actions";
+import { Loader2Icon } from "lucide-react";
 import { useOptimistic, useTransition } from "react";
 
 export const LikeButton = ({ likes, id }: { likes: number; id: string }) => {
@@ -33,7 +34,16 @@ export const LikeButton = ({ likes, id }: { likes: number; id: string }) => {
       >
         💖
       </button>
-      {optimisticState.likes}
+
+      <p className="flex items-center">
+        {optimisticState.likes}
+        <Loader2Icon
+          className={`ml-2 transition-opacity duration-300 ease-in-out animate-spin ${
+            optimisticState.sending ? "opacity-100" : "opacity-0"
+          }`}
+          size={20}
+        />
+      </p>
     </div>
   );
 };
