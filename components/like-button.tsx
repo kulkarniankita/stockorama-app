@@ -1,21 +1,28 @@
 "use client";
 
 import { incrementLikesAction } from "@/actions/product-actions";
-import { useState } from "react";
+import { useOptimistic, useTransition } from "react";
 
-export const LikeButton = ({
-  likes: parentLikes,
-  id,
-}: {
-  likes: number;
-  id: string;
-}) => {
-  const [likes, setLikes] = useState(parentLikes);
-
+export const LikeButton = ({ likes, id }: { likes: number; id: string }) => {
+  const [isPending, startTransition] = useTransition();
+  const [optimisticState, setOptimistic] = useOptimistic(
+    {
+      likes,
+      sending: false,
+    },
+    (currentState, newLikeCount: number) => {
+      return {
+        ...currentState,
+        likes: newLikeCount,
+        sending: true,
+      };
+    }
+  );
   const handleLike = async () => {
-    setLikes(likes + 1);
-    //call server action
-    await incrementLikesAction({ id });
+    startTransition(async () => {
+      setOptimistic(optimisticState.likes + 1);
+      await incrementLikesAction({ id });
+    });
   };
 
   return (
@@ -26,7 +33,7 @@ export const LikeButton = ({
       >
         💖
       </button>
-      {likes}
+      {optimisticState.likes}
     </div>
   );
 };

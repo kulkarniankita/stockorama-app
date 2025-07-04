@@ -2,6 +2,7 @@
 
 import { createProduct, incrementLikes } from "@/lib/db/product";
 import { State } from "@/types/product-types";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -65,6 +66,7 @@ export const incrementLikesAction = async ({ id }: { id: string }) => {
   try {
     //make the db request
     await incrementLikes({ id });
+    revalidatePath("/products");
   } catch (err) {
     console.error("error occurred incrementing likes", err);
     return {
