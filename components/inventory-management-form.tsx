@@ -1,38 +1,31 @@
 "use client";
 
-export default function InventoryManagementForm() {
-  const handleSubmit = async (formData: FormData) => {
-    // "use server";
-    // console.log({ formData });
-    const productName = formData.get("product-name");
-    const quantity = formData.get("quantity");
-    console.log({ productName, quantity });
+import { createProductAction } from "@/actions/product-actions";
+import { State } from "@/types/product-types";
+import { useActionState } from "react";
+import { InputField } from "./form-fields/input-field";
 
-    const response = await fetch("/api/create-product", {
-      method: "POST",
-      body: JSON.stringify({ productName, quantity }),
-    });
-    const data = await response.json();
-    console.log({ data });
-  };
+export default function InventoryManagementForm() {
+  const initialState: State = { message: "", errors: {}, type: "" };
+  const [state, formAction, pending] = useActionState(
+    createProductAction,
+    initialState
+  );
   return (
-    <form className="space-y-4" action={handleSubmit}>
-      <label htmlFor="product-name">Product name</label>
-      <input
-        type="text"
-        placeholder="Product name"
+    <form className="space-y-4" action={formAction}>
+      {state?.type === "error" && <p className="error">{state.message}</p>}
+      <InputField
+        label="Product name"
         name="product-name"
-        id="product-name"
+        error={state?.errors?.name}
       />
-      <label htmlFor="quantity">Quantity</label>
-      <input
-        type="number"
-        placeholder="Quantity"
+      <InputField
+        label="Quantity"
         name="quantity"
-        id="quantity"
+        error={state?.errors?.quantity}
       />
-      <button type="submit" className="submit-button">
-        Add
+      <button disabled={pending} type="submit" className="submit-button">
+        {pending ? "Adding..." : "Add"}
       </button>
     </form>
   );
