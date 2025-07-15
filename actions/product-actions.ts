@@ -63,6 +63,12 @@ export const createProductAction = async (
 };
 
 export const incrementLikesAction = async ({ id }: { id: string }) => {
+  if (!isUserAuthenticated()) {
+    return {
+      type: "error",
+      message: "You must be logged in to increment likes",
+    };
+  }
   try {
     //make the db request
     await incrementLikes({ id });
@@ -78,6 +84,12 @@ export const incrementLikesAction = async ({ id }: { id: string }) => {
 };
 
 export const deleteProductAction = async ({ id }: { id: string }) => {
+  if (!isUserAuthenticated()) {
+    return {
+      type: "error",
+      message: "You must be logged in to delete products",
+    };
+  }
   try {
     await deleteProduct({ id });
     revalidatePath("/products");
